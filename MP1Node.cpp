@@ -233,6 +233,10 @@ void MP1Node::nodeLoopOps() {
 	 * Your code goes here
 	 */
 
+	//kiem tra messages
+	checkMessages();
+	
+
     return;
 }
 

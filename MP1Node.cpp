@@ -218,6 +218,9 @@ bool MP1Node::recvCallBack(void *env, char *data, int size ) {
 	/*
 	 * Your code goes here
 	 */
+	//xu ly messages for nhung messages khac
+
+	checkMessage();
 }
 
 /**

@@ -220,7 +220,7 @@ bool MP1Node::recvCallBack(void *env, char *data, int size ) {
 	 */
 	//xu ly messages for nhung messages khac
 
-	checkMessage();
+
 }
 
 /**
@@ -236,21 +236,7 @@ void MP1Node::nodeLoopOps() {
 	 * Your code goes here
 	 */
 
-	//giong code nodeLoop phan tren
-	 if (memberNode->bFailed) {
-    		return;
-    	}
-	
-	//kiem tra messages
-	checkMessages();
 
-	 // Wait until you're in the group...
-	    if( !memberNode->inGroup ) {
-    	return;
-    }
-
-    // ...then jump in and share your responsibilites!
-    nodeLoopOps();
 
     return;
 }

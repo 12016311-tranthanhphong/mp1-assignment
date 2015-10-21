@@ -125,7 +125,7 @@ int MP1Node::introduceSelfToGroup(Address *joinaddr) {
 #endif
 
 		if ( 0 == strcmp((char *)&(memberNode->addr.addr), (char *)&(joinaddr->addr))) {
-			
+				// I am the group booter (first process to join the group). Boot up the group
 #ifdef DEBUGLOG
 				log->LOG(&memberNode->addr, "Starting up group...");
 #endif
@@ -135,10 +135,11 @@ int MP1Node::introduceSelfToGroup(Address *joinaddr) {
 				size_t msgsize = sizeof(MessageHdr) + sizeof(joinaddr->addr) + sizeof(long) + 1;
 				msg = (MessageHdr *) malloc(msgsize * sizeof(char));
 
-			
+				// create JOINREQ message: format of data is {struct Address myaddr}
 				msg->msgType = JOINREQ;
 				memcpy((char *)(msg+1), &memberNode->addr.addr, sizeof(memberNode->addr.addr));
 				memcpy((char *)(msg+1) + sizeof(memberNode->addr.addr) + 1, &memberNode->heartbeat, sizeof(long));
+				
 
 #ifdef DEBUGLOG
 				sprintf(s, "Trying to join...");
@@ -152,6 +153,7 @@ int MP1Node::introduceSelfToGroup(Address *joinaddr) {
 		}
 
 		return 1;
+
 }
 
 /**
@@ -279,13 +281,14 @@ void MP1Node::onHeartbeat(Address* addr, void* data, size_t size) {
 		assert(size >= sizeof(long));
 		long *heartbeat = (long*)data;
 
-	
+		
+
 		bool newData = UpdateMemberList(addr, *heartbeat);
 		if (newData) {
 				LogMemberList();
 				SendHBSomewhere(addr, *heartbeat);
 		} else {
-				
+				//
 		}
 }
 
@@ -323,7 +326,8 @@ void MP1Node::nodeLoopOps() {
 
 		stringstream ss;
 		for (vector<MemberListEntry>::iterator it = memberNode->memberList.begin(); it != memberNode->memberList.end(); it++) {
-		
+			//
+		    
 			if (par->getcurrtime() - it->timestamp > timeout) {
 				Address addr = AddressFromMLE(&(*it));
 				ss << "Timing out " << addr.getAddress();
@@ -344,7 +348,7 @@ void MP1Node::nodeLoopOps() {
 		/*
 		 * Your code goes here
 		 */
-	
+		//
 
 		UpdateMemberList(&memberNode->addr, ++memberNode->heartbeat);
 
@@ -358,9 +362,6 @@ void MP1Node::nodeLoopOps() {
  *
  * DESCRIPTION: Function checks if the address is NULL
  */
-
-
-////////////////////////R
 int MP1Node::isNullAddress(Address *addr) {
 		return (memcmp(addr->addr, NULLADDR, 6) == 0 ? 1 : 0);
 }
@@ -379,6 +380,8 @@ Address MP1Node::getJoinAddress() {
 
 		return joinaddr;
 }
+
+
 
 /**
  * FUNCTION NAME: initMemberListTable
@@ -400,7 +403,7 @@ void MP1Node::LogMemberList() {
 		msg << it->getid() << ": " << it->getheartbeat() << "(" << it->gettimestamp() << "), ";
 	}
 	msg << "]";
-
+	//
 }
 
 void MP1Node::SendHBSomewhere(Address *src_addr, long heartbeat) {
@@ -425,10 +428,10 @@ void MP1Node::SendHBSomewhere(Address *src_addr, long heartbeat) {
 			}
 			if ((((double)(rand() % 100))/100) < prob) {
 
-				
+				//
 				emulNet->ENsend(&memberNode->addr, &dst_addr, (char *)msg, msgsize);
 			} else {
-			
+				//
 			}
 	}
     free(msg);

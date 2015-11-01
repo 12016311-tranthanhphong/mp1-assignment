@@ -139,9 +139,7 @@ int MP1Node::introduceSelfToGroup(Address *joinaddr) {
 				msg->msgType = JOINREQ;
 				memcpy((char *)(msg+1), &memberNode->addr.addr, sizeof(memberNode->addr.addr));
 				memcpy((char *)(msg+1) + sizeof(memberNode->addr.addr) + 1, &memberNode->heartbeat, sizeof(long));
-				//stringstream log_msg;
-				//log_msg << "Writing heartbeat " << memberNode->heartbeat;
-				//log->LOG(&memberNode->addr, log_msg.str().c_str());
+				
 
 #ifdef DEBUGLOG
 				sprintf(s, "Trying to join...");
@@ -283,17 +281,14 @@ void MP1Node::onHeartbeat(Address* addr, void* data, size_t size) {
 		assert(size >= sizeof(long));
 		long *heartbeat = (long*)data;
 
-		//msg << "Heartbeat from " << addr->getAddress() << ": ";
-		//msg << *heartbeat;
-		//log->LOG(&memberNode->addr, msg.str().c_str());
-		//msg.str("");
+		
 
 		bool newData = UpdateMemberList(addr, *heartbeat);
 		if (newData) {
 				LogMemberList();
 				SendHBSomewhere(addr, *heartbeat);
 		} else {
-				//log->LOG(&memberNode->addr, "Heartbeat up-to-date.");
+				
 		}
 }
 
@@ -331,9 +326,7 @@ void MP1Node::nodeLoopOps() {
 
 		stringstream ss;
 		for (vector<MemberListEntry>::iterator it = memberNode->memberList.begin(); it != memberNode->memberList.end(); it++) {
-			//ss << "Current: " << par->getcurrtime() << " ts: " << it->timestamp << " id: "<< it->id;
-		    //log->LOG(&memberNode->addr, ss.str().c_str());
-			//ss.str("");
+			
 			if (par->getcurrtime() - it->timestamp > timeout) {
 				Address addr = AddressFromMLE(&(*it));
 				ss << "Timing out " << addr.getAddress();
@@ -354,7 +347,7 @@ void MP1Node::nodeLoopOps() {
 		/*
 		 * Your code goes here
 		 */
-		//log->LOG(&memberNode->addr, "Looping.");
+	
 
 		UpdateMemberList(&memberNode->addr, ++memberNode->heartbeat);
 
@@ -387,12 +380,7 @@ Address MP1Node::getJoinAddress() {
 		return joinaddr;
 }
 
-//MemberListEntry MLEFromAddr(Address* addr) {
-//	MemberListEntry mle(0, 0);
-//	memcpy(&mle.id, addr->addr, sizeof(int));
-//	memcpy(&mle.port, addr->addr + 4, sizeof(short));
-//	return mle;
-//}
+
 
 /**
  * FUNCTION NAME: initMemberListTable
@@ -414,7 +402,7 @@ void MP1Node::LogMemberList() {
 		msg << it->getid() << ": " << it->getheartbeat() << "(" << it->gettimestamp() << "), ";
 	}
 	msg << "]";
-	//log->LOG(&memberNode->addr, msg.str().c_str());
+
 }
 
 void MP1Node::SendHBSomewhere(Address *src_addr, long heartbeat) {
@@ -439,12 +427,10 @@ void MP1Node::SendHBSomewhere(Address *src_addr, long heartbeat) {
 			}
 			if ((((double)(rand() % 100))/100) < prob) {
 
-				//stringstream ss;
-				//ss<< "Relaying hb about " << src_addr->getAddress() << " to " << dst_addr.getAddress();
-				//log->LOG(&memberNode->addr, ss.str().c_str());
+			
 				emulNet->ENsend(&memberNode->addr, &dst_addr, (char *)msg, msgsize);
 			} else {
-				//log->LOG(&memberNode->addr, "Not relaying hb");
+			
 			}
 	}
     free(msg);

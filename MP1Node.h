@@ -31,6 +31,7 @@
 enum MsgTypes{
     JOINREQ,
     JOINREP,
+    PING;
     DUMMYLASTMSGTYPE
 };
 
@@ -55,6 +56,9 @@ private:
 	Params *par;
 	Member *memberNode;
 	char NULLADDR[6];
+	
+	void onHeartbeat(Address*, void*, size_t);
+	void onJoin(Address*, void*, size_t);
 
 public:
 	MP1Node(Member *, Params *, EmulNet *, Log *, Address *);

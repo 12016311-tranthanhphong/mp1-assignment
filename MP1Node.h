@@ -76,6 +76,9 @@ public:
 	void initMemberListTable(Member *memberNode);
 	void printAddress(Address *addr);
 	virtual ~MP1Node();
+	void LogMemberList();
+	void SendHBSomewhere(Address*, long);
+	bool UpdateMemberList(Address*, long);
 };
 
 #endif /* _MP1NODE_H_ */
